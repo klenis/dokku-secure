@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
+APP="$1"; PORT="$2";
+
+if [ -f $DOKKU_ROOT/$APP/SSL-* ]; then
+  for SSL_FILE in $DOKKU_ROOT/$APP/SSL-*
+  do
+    SSL_FILE_CONTENT=$(<"$SSL_FILE")
+    CERTIFICATE_NAME=$(echo $SSL_FILE_CONTENT | cut -f1 -d' ')
+    IPV4=$(echo $SSL_FILE_CONTENT | cut -f2 -d' ')
+    IPV6=$(echo $SSL_FILE_CONTENT | cut -f3 -d' ')
+    DOMAINS=$(echo $SSL_FILE_CONTENT | cut -f4- -d' ')
+
+    dokku secure:set $APP $CERTIFICATE_NAME $IPV4 $IPV6 $DOMAINS
+  done
+fi

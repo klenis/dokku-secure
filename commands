@@ -59,6 +59,7 @@ case "$1" in
   DOMAINS="${*:6}"
   HOST=`grep server_name $DOKKU_ROOT/$APP/nginx.conf | sed -E "s/.*(server_name) (.*);.*/\2/"`
   SSL_FILE="$DOKKU_ROOT/$APP/SSL-$CERTIFICATE_NAME"
+  PORT=$(< "$DOKKU_ROOT/$APP/PORT")
 
   [ -f "$DOKKU_ROOT/$APP/ssl/$CERTIFICATE_NAME.crt" ] || {
     echo "$DOKKU_ROOT/$APP/ssl/$CERTIFICATE_NAME.crt does not exist"
@@ -73,6 +74,7 @@ case "$1" in
   echo "$CERTIFICATE_NAME $IPV4 $IPV6 $DOMAINS" > $SSL_FILE
 
   cat<<EOF > $DOKKU_ROOT/$APP/nginx-ssl-$CERTIFICATE_NAME.conf
+upstream $APP-ssl-$CERTIFICATE_NAME { server 127.0.0.1:$PORT; }
 server {
   listen      $IPV4:443 ssl spdy;
   listen      [$IPV6]:443 ssl spdy;
@@ -88,12 +90,9 @@ server {
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
   ssl_prefer_server_ciphers on;
   ssl_session_timeout 5m;
-  ssl_session_cache shared:SSL:50m;
 
   location    / {
     proxy_pass  http://$APP;
-    proxy_redirect http://$HOST:5000/ https://$HOST/;
-    proxy_redirect https://$HOST:5000/ https://$HOST/;
     proxy_http_version 1.1;
     proxy_set_header Upgrade \$http_upgrade;
     proxy_set_header Connection "upgrade";

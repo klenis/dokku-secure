@@ -1,11 +1,11 @@
 # dokku-secure
 
-[Dokku Alternative](https://github.com/dokku-alt/dokku-alt) plugin to setup SSL with specific listening addresses for IPv4 and IPV6 and multiple domains/wildcard domains
+[Dokku](https://github.com/progrium/dokku) plugin to setup SSL with specific listening addresses for IPv4 and IPV6 and multiple domains/wildcard domains
 
 ## Installation
 
 ```bash
-git clone https://github.com/klenis/dokku-secure.git /var/lib/dokku-alt/plugins/dokku-secure
+git clone https://github.com/klenis/dokku-secure.git /var/lib/dokku/plugins/dokku-secure
 dokku plugins-install
 ```
 

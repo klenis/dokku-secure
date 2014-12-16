@@ -39,7 +39,7 @@ case "$1" in
   fi
   if [[ -z "$4" ]]; then
     echo "Usage: dokku secure:set <app> <certificate> <ipv4> <ipv6> <domains...>"
-    echo "Must specify ipv4 address or '*'."
+    echo "Must specify ipv4 address or '0.0.0.0'."
     exit 1
   fi
   if [[ -z "$5" ]]; then

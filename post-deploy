@@ -2,7 +2,7 @@
 set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
 APP="$1"; PORT="$2";
 
-if [ -f $DOKKU_ROOT/$APP/SSL-* ]; then
+if ls $DOKKU_ROOT/$APP/SSL-* 1> /dev/null 2>&1; then
   for SSL_FILE in $DOKKU_ROOT/$APP/SSL-*
   do
     SSL_FILE_CONTENT=$(<"$SSL_FILE")

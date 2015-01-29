@@ -21,7 +21,7 @@ fi
 case "$1" in
 
   secure)
-  if [ -f $DOKKU_ROOT/$APP/SSL-* ]; then
+  if ls $DOKKU_ROOT/$APP/SSL-* 1> /dev/null 2>&1; then
     for SSL_FILE in $DOKKU_ROOT/$APP/SSL-*
     do
       cat $SSL_FILE
